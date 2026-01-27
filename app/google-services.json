@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "538763739524",
+    "project_id": "flashcardquizapp-ab10e",
+    "storage_bucket": "flashcardquizapp-ab10e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:538763739524:android:15fe0382e29bc66b7d5dd1",
+        "android_client_info": {
+          "package_name": "com.example.flashquiz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAX1cAdnJs1LfEzDhIWWbIqEERAvQ3E3ok"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
