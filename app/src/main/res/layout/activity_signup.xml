@@ -11,7 +11,7 @@
         android:id="@+id/imgSignup"
         android:layout_width="164dp"
         android:layout_height="134dp"
-        android:layout_marginTop="85dp"
+        android:layout_marginTop="99dp"
         android:contentDescription="Signup image"
         android:src="@drawable/signup"
         app:layout_constraintEnd_toEndOf="parent"

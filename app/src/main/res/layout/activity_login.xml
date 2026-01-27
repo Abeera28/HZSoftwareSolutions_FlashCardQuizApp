@@ -11,7 +11,7 @@
         android:id="@+id/imgLogin"
         android:layout_width="164dp"
         android:layout_height="134dp"
-        android:layout_marginTop="85dp"
+        android:layout_marginTop="99dp"
         android:contentDescription="Login Image"
         android:src="@drawable/signup"
         app:layout_constraintTop_toTopOf="parent"
