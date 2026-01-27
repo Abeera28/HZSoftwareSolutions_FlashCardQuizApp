@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <!-- TOP LOGIN IMAGE -->
+    <ImageView
+        android:id="@+id/imgLogin"
+        android:layout_width="164dp"
+        android:layout_height="134dp"
+        android:layout_marginTop="85dp"
+        android:contentDescription="Login Image"
+        android:src="@drawable/signup"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- EMAIL INPUT -->
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="24dp"
+        android:hint="Email"
+        android:padding="12dp"
+        android:background="@android:drawable/edit_text"
+        app:layout_constraintTop_toBottomOf="@id/imgLogin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"/>
+
+    <!-- PASSWORD INPUT -->
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="16dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:padding="12dp"
+        android:background="@android:drawable/edit_text"
+        app:layout_constraintTop_toBottomOf="@id/etEmail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"/>
+
+    <!-- LOGIN BUTTON -->
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="24dp"
+        android:text="Login"
+        android:textAllCaps="false"
+        android:backgroundTint="#1B2A6D"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/etPassword"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"/>
+
+    <!-- SIGNUP TEXT -->
+    <TextView
+        android:id="@+id/tvSignup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Don't have an account? Sign Up"
+        android:textSize="14sp"
+        android:textColor="#1B2A6D"
+        app:layout_constraintTop_toBottomOf="@id/btnLogin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- BOTTOM WAVE IMAGE -->
+    <ImageView
+        android:id="@+id/bottomWave"
+        android:layout_width="0dp"
+        android:layout_height="180dp"
+        android:src="@drawable/bottom_wave"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
