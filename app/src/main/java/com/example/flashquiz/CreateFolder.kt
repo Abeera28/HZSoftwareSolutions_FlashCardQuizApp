@@ -2,6 +2,7 @@ package com.example.flashquiz
 
 import android.os.Bundle
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import androidx.appcompat.app.AppCompatActivity
 import com.example.flashquiz.databinding.ActivityCreateFolderBinding
 import com.google.firebase.firestore.FirebaseFirestore
@@ -30,18 +31,25 @@ class CreateFolderActivity : AppCompatActivity() {
     }
 
     private fun saveFolder(name: String) {
-        val id = db.collection("folders").document().id
-        val folder = Folder(id, name)
+        val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
-        db.collection("folders").document(id).set(folder)
+        val folderRef = db.collection("users")
+            .document(userId)
+            .collection("folders")
+            .document()
+
+        val folder = Folder(folderRef.id, name)
+
+        folderRef.set(folder)
             .addOnSuccessListener {
                 Toast.makeText(this, "Folder created", Toast.LENGTH_SHORT).show()
-                finish() // go back to MainActivity
+                finish()
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Failed to create folder", Toast.LENGTH_SHORT).show()
             }
     }
+
 
     override fun onSupportNavigateUp(): Boolean {
         finish()

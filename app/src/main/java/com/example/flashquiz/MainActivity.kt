@@ -31,20 +31,23 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.adapter = adapter
 
         // Load folders from Firebase in real-time
-        db.collection("folders")
+        val userId = auth.currentUser!!.uid
+
+        db.collection("users")
+            .document(userId)
+            .collection("folders")
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     Toast.makeText(this, "Error loading folders", Toast.LENGTH_SHORT).show()
                     return@addSnapshotListener
                 }
-                if (snapshot != null) {
-                    folderList.clear()
-                    for (doc in snapshot.documents) {
-                        val folder = doc.toObject(Folder::class.java)
-                        if (folder != null) folderList.add(folder)
-                    }
-                    adapter.notifyDataSetChanged()
+
+                folderList.clear()
+                snapshot?.documents?.forEach { doc ->
+                    val folder = doc.toObject(Folder::class.java)
+                    if (folder != null) folderList.add(folder)
                 }
+                adapter.notifyDataSetChanged()
             }
 
         // Button click -> go to CreateFolderActivity
