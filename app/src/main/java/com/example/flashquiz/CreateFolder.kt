@@ -1,10 +1,11 @@
 package com.example.flashquiz
 
+import android.app.Activity
 import android.os.Bundle
 import android.widget.Toast
-import com.google.firebase.auth.FirebaseAuth
 import androidx.appcompat.app.AppCompatActivity
 import com.example.flashquiz.databinding.ActivityCreateFolderBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class CreateFolderActivity : AppCompatActivity() {
@@ -43,13 +44,17 @@ class CreateFolderActivity : AppCompatActivity() {
         folderRef.set(folder)
             .addOnSuccessListener {
                 Toast.makeText(this, "Folder created", Toast.LENGTH_SHORT).show()
-                finish()
+
+                // Notify MainActivity that a new folder was added
+                val intent = intent
+                setResult(Activity.RESULT_OK, intent)
+
+                finish() // go back to MainActivity
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Failed to create folder", Toast.LENGTH_SHORT).show()
             }
     }
-
 
     override fun onSupportNavigateUp(): Boolean {
         finish()

@@ -2,6 +2,7 @@ package com.example.flashquiz
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,6 +49,15 @@ class MainActivity : AppCompatActivity() {
                     if (folder != null) folderList.add(folder)
                 }
                 adapter.notifyDataSetChanged()
+
+                // Show placeholder if no folders exist
+                if (folderList.isEmpty()) {
+                    binding.emptyPlaceholder.visibility = View.VISIBLE
+                    binding.recyclerView.visibility = View.GONE
+                } else {
+                    binding.emptyPlaceholder.visibility = View.GONE
+                    binding.recyclerView.visibility = View.VISIBLE
+                }
             }
 
         // Button click -> go to CreateFolderActivity
