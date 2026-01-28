@@ -22,41 +22,45 @@ class CreateFolderActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true) // back arrow
 
         binding.saveFolderButton.setOnClickListener {
+            // Get folder name and description
             val folderName = binding.folderNameEditText.text.toString().trim()
-            if (folderName.isNotEmpty()) {
-                saveFolder(folderName)
-            } else {
-                Toast.makeText(this, "Enter folder name", Toast.LENGTH_SHORT).show()
+            val folderDesc = binding.folderDescEditText.text.toString().trim() // optional
+
+            // Validate folder name
+            if (folderName.isEmpty()) {
+                Toast.makeText(this, "Please enter folder name", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            // Call save function with both name and description
+            saveFolder(folderName, folderDesc)
         }
     }
 
-    private fun saveFolder(name: String) {
-        val userId = FirebaseAuth.getInstance().currentUser!!.uid
+        // Updated saveFolder function to include description
+        private fun saveFolder(name: String, description: String) {
+            val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
-        val folderRef = db.collection("users")
-            .document(userId)
-            .collection("folders")
-            .document()
+            val folderRef = db.collection("users")
+                .document(userId)
+                .collection("folders")
+                .document()
 
-        val folder = Folder(folderRef.id, name)
+            // Update Folder data class to include description
+            val folder = Folder(folderRef.id, name, description)
 
-        folderRef.set(folder)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Folder created", Toast.LENGTH_SHORT).show()
+            folderRef.set(folder)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Folder created", Toast.LENGTH_SHORT).show()
+                    finish() // go back to MainActivity
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Failed to create folder", Toast.LENGTH_SHORT).show()
+                }
+        }
 
-                // Notify MainActivity that a new folder was added
-                val intent = intent
-                setResult(Activity.RESULT_OK, intent)
 
-                finish() // go back to MainActivity
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "Failed to create folder", Toast.LENGTH_SHORT).show()
-            }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
+        override fun onSupportNavigateUp(): Boolean {
         finish()
         return true
     }

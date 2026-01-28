@@ -21,16 +21,36 @@
             android:src="@android:drawable/ic_menu_agenda"
             android:contentDescription="Folder Icon"/>
 
-        <!-- Folder Name -->
-        <TextView
-            android:id="@+id/folderNameTextView"
-            android:layout_width="wrap_content"
+        <!-- Text Container (Name + Description) -->
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="Folder Name"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#1B2A6D"/>
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <!-- Folder Name -->
+            <TextView
+                android:id="@+id/folderNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Folder Name"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#1B2A6D"/>
+
+            <!-- Folder Description -->
+            <TextView
+                android:id="@+id/folderDescTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Folder description here"
+                android:textSize="14sp"
+                android:textColor="#555555"
+                android:layout_marginTop="2dp"/>
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
