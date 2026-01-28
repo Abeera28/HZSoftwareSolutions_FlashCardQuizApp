@@ -72,6 +72,8 @@
         android:layout_height="52dp"
         android:layout_marginTop="24dp"
         android:text="Sign Up"
+        android:textSize="20dp"
+        android:textStyle="bold"
         android:textAllCaps="false"
         android:backgroundTint="#1B2A6D"
         android:textColor="@android:color/white"
