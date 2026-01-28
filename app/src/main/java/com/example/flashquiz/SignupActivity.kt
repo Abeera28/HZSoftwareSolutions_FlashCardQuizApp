@@ -38,14 +38,23 @@ class SignupActivity : AppCompatActivity() {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
+
+                        // 🔑 THIS LINE FIXES EVERYTHING
+                        FirebaseAuth.getInstance().signOut()
+
                         Toast.makeText(this, "Signup successful! Please login.", Toast.LENGTH_SHORT).show()
-                        // Go to LoginActivity
                         startActivity(Intent(this, LoginActivity::class.java))
                         finish()
+
                     } else {
-                        Toast.makeText(this, "Signup failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            "Signup failed: ${task.exception?.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
+
         }
     }
 }
