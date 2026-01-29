@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import kotlin.jvm.java
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flashquiz.databinding.ActivityMainBinding
@@ -27,7 +28,14 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         // RecyclerView setup
-        adapter = FolderAdapter(folderList)
+        adapter = FolderAdapter(folderList) { folder ->
+            // Open FlashcardActivity when a folder is clicked
+            val intent = Intent(this, FlashcardActivity::class.java)
+            intent.putExtra("folderId", folder.id)
+            intent.putExtra("folderName", folder.name)
+            startActivity(intent)
+        }
+
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
 

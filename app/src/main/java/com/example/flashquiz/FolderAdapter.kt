@@ -13,7 +13,8 @@ import com.example.flashquiz.databinding.ItemFolderBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class FolderAdapter(private val folderList: MutableList<Folder>) :
+class FolderAdapter(private val folderList: MutableList<Folder>,
+    private val onFolderClick: (Folder) -> Unit):
     RecyclerView.Adapter<FolderAdapter.FolderViewHolder>() {
 
     private val db = FirebaseFirestore.getInstance()
@@ -67,6 +68,14 @@ class FolderAdapter(private val folderList: MutableList<Folder>) :
             }
 
             popup.show()
+        }
+        // ADD THIS: Click listener for the whole folder card
+        holder.binding.root.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, FlashcardActivity::class.java)
+            intent.putExtra("folderId", folder.id)
+            intent.putExtra("folderName", folder.name)
+            context.startActivity(intent)
         }
     }
 
