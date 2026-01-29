@@ -18,6 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <!-- Folder Name Input with side padding -->
+    <!-- Folder Name Input -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/folderNameLayout"
         android:layout_width="0dp"
@@ -32,17 +33,20 @@
         app:boxCornerRadiusTopStart="12dp"
         app:boxCornerRadiusTopEnd="12dp"
         app:boxCornerRadiusBottomStart="12dp"
-        app:boxCornerRadiusBottomEnd="12dp">
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:hintEnabled="true">  <!-- ensures floating label -->
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/folderNameEditText"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:hint="Enter folder name"
-            android:inputType="text"/>
+            android:layout_height="56dp"
+        android:hint="Enter folder name"
+        android:inputType="text"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Folder Description Input (Optional) with side padding -->
+    <!-- Folder Description Input -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/folderDescLayout"
         android:layout_width="0dp"
@@ -57,14 +61,17 @@
         app:boxCornerRadiusTopStart="12dp"
         app:boxCornerRadiusTopEnd="12dp"
         app:boxCornerRadiusBottomStart="12dp"
-        app:boxCornerRadiusBottomEnd="12dp">
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:hintEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/folderDescEditText"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="56dp"
             android:hint="Enter folder description (optional)"
-            android:inputType="text"/>
+            android:inputType="text"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Save Folder Button -->

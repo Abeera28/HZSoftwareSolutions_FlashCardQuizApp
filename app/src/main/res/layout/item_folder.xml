@@ -1,52 +1,68 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_marginStart="4dp"
+    android:layout_marginEnd="4dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp">
 
-    <LinearLayout
+
+<androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:padding="16dp">
 
         <!-- Folder Icon -->
         <ImageView
+            android:id="@+id/folderIcon"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:src="@android:drawable/ic_menu_agenda"/>
+            android:src="@android:drawable/ic_menu_agenda"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Text Container -->
-        <LinearLayout
+        <!-- Folder Name -->
+        <TextView
+            android:id="@+id/folderNameTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:orientation="vertical"
-            android:layout_weight="1">
+            android:text="Folder Name"
+            android:textColor="#1B2A6D"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/folderIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/folderIcon" />
 
-            <TextView
-                android:id="@+id/folderNameTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Folder Name"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#1B2A6D"/>
+        <!-- Folder Description -->
+        <TextView
+            android:id="@+id/folderDescTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Folder description here"
+            android:textColor="#555555"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@id/folderNameTextView"
+            app:layout_constraintEnd_toStartOf="@id/folderTimeTextView"
+            app:layout_constraintTop_toBottomOf="@id/folderNameTextView" />
 
-            <TextView
-                android:id="@+id/folderDescTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Folder description here"
-                android:textSize="14sp"
-                android:textColor="#555555"
-                android:layout_marginTop="2dp"/>
-        </LinearLayout>
+        <!-- Timestamp RIGHT side of description -->
+        <TextView
+            android:id="@+id/folderTimeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="11:45 PM"
+            android:textColor="#999999"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/folderDescTextView"
+            app:layout_constraintBottom_toBottomOf="@id/folderDescTextView" />
 
         <!-- Three-dot menu -->
         <ImageView
@@ -54,8 +70,9 @@
             android:layout_width="30dp"
             android:layout_height="28dp"
             android:padding="4dp"
-            android:src="@drawable/dot" />
+            android:src="@drawable/dot"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

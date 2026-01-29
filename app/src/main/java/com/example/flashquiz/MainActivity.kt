@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         db.collection("users")
             .document(userId)
             .collection("folders")
+            .orderBy("timestamp", com.google.firebase.firestore.Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     Toast.makeText(this, "Error loading folders", Toast.LENGTH_SHORT).show()
@@ -48,9 +49,9 @@ class MainActivity : AppCompatActivity() {
                     val folder = doc.toObject(Folder::class.java)
                     if (folder != null) folderList.add(folder)
                 }
+
                 adapter.notifyDataSetChanged()
 
-                // Show placeholder if no folders exist
                 if (folderList.isEmpty()) {
                     binding.emptyPlaceholder.visibility = View.VISIBLE
                     binding.recyclerView.visibility = View.GONE
