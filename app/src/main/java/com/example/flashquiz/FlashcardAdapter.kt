@@ -56,25 +56,25 @@ class FlashcardAdapter(
             popup.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.editFolder -> {
-                        // Edit same as click on item
+                        // Edit flashcard
                         holder.itemView.performClick()
                         true
                     }
                     R.id.deleteFolder -> {
-                        deleteFlashcard(flashcard, position, view)
+                        deleteFlashcard(flashcards[holder.adapterPosition], holder)
                         true
                     }
-
                     else -> false
                 }
             }
             popup.show()
         }
+
     }
 
     override fun getItemCount(): Int = flashcards.size
 
-    private fun deleteFlashcard(flashcard: Flashcard, position: Int, view: View) {
+    private fun deleteFlashcard(flashcard: Flashcard, holder: FlashcardViewHolder) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
         db.collection("users")
             .document(userId)
@@ -84,12 +84,13 @@ class FlashcardAdapter(
             .document(flashcard.id)
             .delete()
             .addOnSuccessListener {
-                flashcards.removeAt(position)
-                notifyItemRemoved(position)
+                Toast.makeText(holder.itemView.context, "Flashcard deleted", Toast.LENGTH_SHORT).show()
+                // DO NOT remove from list manually
             }
             .addOnFailureListener {
-                Toast.makeText(view.context, "Failed to delete flashcard", Toast.LENGTH_SHORT).show()
+                Toast.makeText(holder.itemView.context, "Failed to delete flashcard", Toast.LENGTH_SHORT).show()
             }
     }
+
 
 }
