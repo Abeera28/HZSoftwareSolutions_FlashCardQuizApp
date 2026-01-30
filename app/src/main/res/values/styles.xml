@@ -1,0 +1,10 @@
+<resources>
+
+    <!-- Toolbar title style ONLY -->
+    <style name="ToolbarTitleStyle">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+</resources>
+
