@@ -1,22 +1,56 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/flashcardToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#1B2A6D">
+
+        <TextView
+            android:id="@+id/toolbarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Flashcards"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/flashcardRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
         android:padding="16dp" />
+
+    <!-- Empty Text -->
+    <TextView
+        android:id="@+id/emptyFlashcardText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add a new flashcard to get started"
+        android:textSize="16sp"
+        android:textColor="#888888"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_gravity="center" />
 
     <!-- Floating Action Button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addFlashcardFab"
-        android:layout_width="66dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:contentDescription="Add Flashcard"
-        android:src="@drawable/flash_add" />
+        android:src="@drawable/flash_add"
+        app:backgroundTint="#1B2A6D"
+        app:tint="@android:color/white"
+        android:contentDescription="Add Flashcard" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
