@@ -41,8 +41,13 @@ class FlashcardActivity : AppCompatActivity() {
 
         // Floating button click
         binding.addFlashcardFab.setOnClickListener {
-            showAddFlashcardDialog()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, AddFlashcardFragment())
+                .addToBackStack(null)
+                .commit()
         }
+
+
 
         // Check empty state
         checkEmptyState()
