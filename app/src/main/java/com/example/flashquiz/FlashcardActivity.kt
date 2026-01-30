@@ -3,6 +3,7 @@ package com.example.flashquiz
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.Query
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flashquiz.databinding.ActivityFlashcardBinding
@@ -38,10 +39,9 @@ class FlashcardActivity : AppCompatActivity() {
         binding.toolbarTitle.text = folderName
 
         // RecyclerView setup
-        adapter = FlashcardAdapter(flashcardList)
+        adapter = FlashcardAdapter(flashcardList, folderId, db)
         binding.flashcardRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.flashcardRecyclerView.adapter = adapter
-
         // Load flashcards
         loadFlashcards()
 
@@ -73,18 +73,20 @@ class FlashcardActivity : AppCompatActivity() {
             .collection("folders")
             .document(folderId)
             .collection("flashcards")
-            .orderBy("timestamp")
+            .orderBy("timestamp", Query.Direction.DESCENDING) // newest on top
             .addSnapshotListener { snapshot, error ->
                 if (error != null) return@addSnapshotListener
 
                 flashcardList.clear()
                 snapshot?.documents?.forEach { doc ->
                     val flashcard = doc.toObject(Flashcard::class.java)
+                    flashcard?.id = doc.id // save Firestore ID
                     if (flashcard != null) flashcardList.add(flashcard)
                 }
                 adapter.notifyDataSetChanged()
                 checkEmptyState()
             }
+
     }
 
     private fun checkEmptyState() {

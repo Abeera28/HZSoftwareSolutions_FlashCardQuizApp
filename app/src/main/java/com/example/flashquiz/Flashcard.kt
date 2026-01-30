@@ -1,8 +1,9 @@
 package com.example.flashquiz
 
 data class Flashcard(
-    val id: String = "",
+    var id: String = "",          // make it var, not val
     val question: String = "",
     val answer: String = "",
-    val timestamp: Long = System.currentTimeMillis()
+    val timestamp: Long = 0L
 )
+

@@ -2,30 +2,94 @@ package com.example.flashquiz
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.View
+import android.widget.Toast
+import android.widget.TextView
+import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+import android.widget.PopupMenu
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flashquiz.databinding.ItemFlashcardBinding
 
-class FlashcardAdapter(private val flashcardList: MutableList<Flashcard>) :
-    RecyclerView.Adapter<FlashcardAdapter.FlashcardViewHolder>() {
+class FlashcardAdapter(
+    private val flashcards: MutableList<Flashcard>,
+    private val folderId: String,
+    private val db: FirebaseFirestore
+) : RecyclerView.Adapter<FlashcardAdapter.FlashcardViewHolder>() {
 
-    inner class FlashcardViewHolder(val binding: ItemFlashcardBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    inner class FlashcardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val flashcardIcon: ImageView = itemView.findViewById(R.id.flashcardIcon)
+        val questionTextView: TextView = itemView.findViewById(R.id.questionTextView)
+        val answerTextView: TextView = itemView.findViewById(R.id.answerTextView)
+        val menuButton: ImageView = itemView.findViewById(R.id.menuButton)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FlashcardViewHolder {
-        val binding = ItemFlashcardBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
-        return FlashcardViewHolder(binding)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_flashcard, parent, false)
+        return FlashcardViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: FlashcardViewHolder, position: Int) {
-        val flashcard = flashcardList[position]
+        val flashcard = flashcards[position]
 
-        holder.binding.questionTextView.text = flashcard.question
-        holder.binding.answerTextView.text = flashcard.answer
+        holder.questionTextView.text = flashcard.question
+        holder.answerTextView.text = flashcard.answer
+
+        // Click on flashcard to edit
+        holder.itemView.setOnClickListener {
+            val dialog = AddFlashcardDialogFragment.newInstance(
+                folderId,
+                flashcard.question,
+                flashcard.answer,
+                flashcard.id
+            )
+            dialog.show((holder.itemView.context as AppCompatActivity).supportFragmentManager, "EditFlashcard")
+        }
+
+        // Popup menu
+        holder.menuButton.setOnClickListener { view ->
+            val popup = PopupMenu(view.context, view)
+            popup.menuInflater.inflate(R.menu.folder_menu, popup.menu)
+            popup.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.editFolder -> {
+                        // Edit same as click on item
+                        holder.itemView.performClick()
+                        true
+                    }
+                    R.id.deleteFolder -> {
+                        deleteFlashcard(flashcard, position, view)
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+            popup.show()
+        }
     }
 
-    override fun getItemCount(): Int = flashcardList.size
+    override fun getItemCount(): Int = flashcards.size
+
+    private fun deleteFlashcard(flashcard: Flashcard, position: Int, view: View) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        db.collection("users")
+            .document(userId)
+            .collection("folders")
+            .document(folderId)
+            .collection("flashcards")
+            .document(flashcard.id)
+            .delete()
+            .addOnSuccessListener {
+                flashcards.removeAt(position)
+                notifyItemRemoved(position)
+            }
+            .addOnFailureListener {
+                Toast.makeText(view.context, "Failed to delete flashcard", Toast.LENGTH_SHORT).show()
+            }
+    }
+
 }

@@ -13,106 +13,94 @@ class AddFlashcardDialogFragment : DialogFragment() {
     private var _binding: FragmentAddFlashcardBinding? = null
     private val binding get() = _binding!!
 
-    private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
+    private val auth = FirebaseAuth.getInstance()
     private var folderId: String = ""
+    private var flashcardId: String? = null // null for new, non-null for edit
+    private var existingQuestion: String? = null
+    private var existingAnswer: String? = null
 
     companion object {
-        fun newInstance(folderId: String, folderName: String): AddFlashcardDialogFragment {
+        fun newInstance(folderId: String, question: String = "", answer: String = "", flashcardId: String? = null): AddFlashcardDialogFragment {
             val fragment = AddFlashcardDialogFragment()
             val args = Bundle()
             args.putString("folderId", folderId)
-            args.putString("folderName", folderName)
+            args.putString("question", question)
+            args.putString("answer", answer)
+            args.putString("flashcardId", flashcardId)
             fragment.arguments = args
             return fragment
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, 0)
-
-        // Assign folderId from arguments
         folderId = arguments?.getString("folderId") ?: ""
+        existingQuestion = arguments?.getString("question")
+        existingAnswer = arguments?.getString("answer")
+        flashcardId = arguments?.getString("flashcardId")
     }
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentAddFlashcardBinding.inflate(inflater, container, false)
 
-        // Assign folderId and folderName
-        folderId = arguments?.getString("folderId") ?: ""
-        val folderName = arguments?.getString("folderName") ?: "Flashcards"
+        // Pre-fill for edit
+        binding.questionEditText.setText(existingQuestion)
+        binding.answerEditText.setText(existingAnswer)
 
-        binding.dialogToolbar.title = folderName
-        binding.dialogToolbar.navigationIcon?.setTint(resources.getColor(android.R.color.white))
-        binding.dialogToolbar.setTitleTextColor(resources.getColor(android.R.color.white))
-
-        // Toolbar back button
-        binding.dialogToolbar.setNavigationIcon(android.R.drawable.ic_menu_close_clear_cancel)
-        binding.dialogToolbar.setNavigationOnClickListener { dismiss() }
-
-        binding.saveFlashcardBtn.setOnClickListener { saveFlashcard() }
+        binding.saveFlashcardBtn.setOnClickListener {
+            saveOrUpdateFlashcard()
+        }
 
         return binding.root
     }
 
-
-    private fun saveFlashcard() {
+    private fun saveOrUpdateFlashcard() {
         val question = binding.questionEditText.text.toString().trim()
         val answer = binding.answerEditText.text.toString().trim()
-
         if (question.isEmpty() || answer.isEmpty()) {
             Toast.makeText(requireContext(), "Please enter both question and answer", Toast.LENGTH_SHORT).show()
             return
         }
 
         val userId = auth.currentUser?.uid ?: return
-        val flashcard = hashMapOf(
+        val flashcardData = hashMapOf(
             "question" to question,
             "answer" to answer,
             "timestamp" to System.currentTimeMillis()
         )
 
-        // Disable button to prevent double click
-        binding.saveFlashcardBtn.isEnabled = false
-
-        // Save to Firestore first
-        db.collection("users")
-            .document(userId)
-            .collection("folders")
-            .document(folderId)
-            .collection("flashcards")
-            .add(flashcard)
-            .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Flashcard added!", Toast.LENGTH_SHORT).show()
-
-                // Dismiss after Firebase operation to avoid crash
-                if (isAdded) dismiss()
-            }
-            .addOnFailureListener {
-                Toast.makeText(requireContext(), "Failed to add flashcard", Toast.LENGTH_SHORT).show()
-                binding.saveFlashcardBtn.isEnabled = true
-            }
+        if (flashcardId != null) {
+            // Update existing
+            db.collection("users")
+                .document(userId)
+                .collection("folders")
+                .document(folderId)
+                .collection("flashcards")
+                .document(flashcardId!!)
+                .set(flashcardData)
+                .addOnSuccessListener {
+                    Toast.makeText(requireContext(), "Flashcard updated!", Toast.LENGTH_SHORT).show()
+                    dismiss()
+                }
+        } else {
+            // Add new
+            db.collection("users")
+                .document(userId)
+                .collection("folders")
+                .document(folderId)
+                .collection("flashcards")
+                .add(flashcardData)
+                .addOnSuccessListener {
+                    Toast.makeText(requireContext(), "Flashcard added!", Toast.LENGTH_SHORT).show()
+                    dismiss()
+                }
+        }
     }
-
-
-    override fun onStart() {
-        super.onStart()
-        dialog?.window?.setLayout(
-            (resources.displayMetrics.widthPixels * 0.9).toInt(), // 90% of screen width
-            ViewGroup.LayoutParams.WRAP_CONTENT // height wraps content
-        )
-        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
-    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
+
