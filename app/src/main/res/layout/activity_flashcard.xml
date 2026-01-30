@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,7 +10,8 @@
         android:id="@+id/flashcardToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#1B2A6D">
+        android:background="#1B2A6D"
+       >
 
         <TextView
             android:id="@+id/toolbarTitle"
@@ -21,20 +23,20 @@
             android:textSize="18sp"/>
     </com.google.android.material.appbar.MaterialToolbar>
 
-    <!-- RecyclerView (flashcards list) -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/flashcardRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="56dp"
-        android:padding="16dp" />
-
-    <!-- 🔥 Fragment Container (ADD THIS) -->
+    <!-- Fragment Container -->
     <FrameLayout
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="56dp"/>
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/flashcardRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
+        android:padding="16dp"/>
 
     <!-- Empty Text -->
     <TextView
@@ -45,8 +47,8 @@
         android:textSize="16sp"
         android:textColor="#888888"
         android:gravity="center"
-        android:visibility="gone"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:visibility="gone"/>
 
     <!-- Floating Action Button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -57,6 +59,7 @@
         android:layout_margin="16dp"
         android:src="@drawable/flash_add"
         app:backgroundTint="#1B2A6D"
-        app:tint="@android:color/white" />
+        app:tint="@android:color/white"
+        android:contentDescription="Add Flashcard"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,29 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialogRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
     android:background="@android:color/white">
 
-    <EditText
-        android:id="@+id/questionTextView"
-        android:layout_width="384dp"
-        android:layout_height="72dp"
-        android:hint="Enter Question" />
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/dialogToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#1B2A6D"
+        android:title="Add Flashcard"
+        android:titleTextColor="@android:color/white" />
 
-    <EditText
-        android:id="@+id/answerTextView"
-        android:layout_width="376dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="12dp"
-        android:autofillHints=""
-        android:hint="Enter Answer" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
 
-    <Button
-        android:id="@+id/saveFolderButton"
-        android:layout_width="370dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Save Flashcard" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/questionEditText"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:hint="Enter Question"
+                android:padding="12dp"
+                android:background="@android:drawable/edit_text"
+                android:layout_marginBottom="12dp"/>
+
+            <EditText
+                android:id="@+id/answerEditText"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:hint="Enter Answer"
+                android:padding="12dp"
+                android:background="@android:drawable/edit_text"
+                android:layout_marginBottom="20dp"/>
+
+            <Button
+                android:id="@+id/saveFlashcardBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#1B2A6D"
+                android:text="Save Flashcard"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

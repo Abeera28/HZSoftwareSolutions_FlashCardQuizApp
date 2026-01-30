@@ -1,9 +1,13 @@
 package com.example.flashquiz
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flashquiz.databinding.ActivityFlashcardBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class FlashcardActivity : AppCompatActivity() {
 
@@ -11,27 +15,26 @@ class FlashcardActivity : AppCompatActivity() {
     private val flashcardList = mutableListOf<Flashcard>()
     private lateinit var adapter: FlashcardAdapter
 
+    private val auth = FirebaseAuth.getInstance()
+    private val db = FirebaseFirestore.getInstance()
+
+    private var folderId: String = ""
+    private var folderName: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // ViewBinding
         binding = ActivityFlashcardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //  Set toolbar
+        // Toolbar setup
         setSupportActionBar(binding.flashcardToolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeButtonEnabled(true)
+        binding.flashcardToolbar.navigationIcon?.setTint(resources.getColor(android.R.color.white))
 
-// Make back arrow white
-        binding.flashcardToolbar.navigationIcon?.setTint(
-            resources.getColor(android.R.color.white)
-        )
-        // Get folder name from intent
-        val folderName = intent.getStringExtra("folderName") ?: "Flashcards"
-
-        // Set folder name in custom TextView (white + bold)
+        // Get folder info
+        folderId = intent.getStringExtra("folderId") ?: ""
+        folderName = intent.getStringExtra("folderName") ?: "Flashcards"
         binding.toolbarTitle.text = folderName
 
         // RecyclerView setup
@@ -39,37 +42,63 @@ class FlashcardActivity : AppCompatActivity() {
         binding.flashcardRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.flashcardRecyclerView.adapter = adapter
 
-        // Floating button click
+        // Load flashcards
+        loadFlashcards()
+
+        // FAB click
         binding.addFlashcardFab.setOnClickListener {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, AddFlashcardFragment())
-                .addToBackStack(null)
-                .commit()
+            val dialog = AddFlashcardDialogFragment.newInstance(folderId, folderName)
+            dialog.show(supportFragmentManager, "AddFlashcardDialog")
+        }
+        // Hide FAB when fragment is open
+        supportFragmentManager.addOnBackStackChangedListener {
+            val fragmentVisible = supportFragmentManager.findFragmentById(R.id.fragmentContainer) != null
+
+            binding.flashcardRecyclerView.visibility = if (fragmentVisible) View.GONE else View.VISIBLE
+            binding.emptyFlashcardText.visibility = if (fragmentVisible) View.GONE else {
+                if (flashcardList.isEmpty()) View.VISIBLE else View.GONE
+            }
+            binding.addFlashcardFab.visibility = if (fragmentVisible) View.GONE else View.VISIBLE
         }
 
 
-
-        // Check empty state
-        checkEmptyState()
     }
 
+    private fun loadFlashcards() {
+        if (folderId.isEmpty()) return
+        val userId = auth.currentUser?.uid ?: return
+
+        db.collection("users")
+            .document(userId)
+            .collection("folders")
+            .document(folderId)
+            .collection("flashcards")
+            .orderBy("timestamp")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) return@addSnapshotListener
+
+                flashcardList.clear()
+                snapshot?.documents?.forEach { doc ->
+                    val flashcard = doc.toObject(Flashcard::class.java)
+                    if (flashcard != null) flashcardList.add(flashcard)
+                }
+                adapter.notifyDataSetChanged()
+                checkEmptyState()
+            }
+    }
 
     private fun checkEmptyState() {
         if (flashcardList.isEmpty()) {
-            binding.emptyFlashcardText.visibility = android.view.View.VISIBLE
-            binding.flashcardRecyclerView.visibility = android.view.View.GONE
+            binding.emptyFlashcardText.visibility = View.VISIBLE
+            binding.flashcardRecyclerView.visibility = View.GONE
         } else {
-            binding.emptyFlashcardText.visibility = android.view.View.GONE
-            binding.flashcardRecyclerView.visibility = android.view.View.VISIBLE
+            binding.emptyFlashcardText.visibility = View.GONE
+            binding.flashcardRecyclerView.visibility = View.VISIBLE
         }
     }
 
-    private fun showAddFlashcardDialog() {
-        // TODO: show dialog to add flashcard
-    }
     override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()
         return true
     }
-
 }
