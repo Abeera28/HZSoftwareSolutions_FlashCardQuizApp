@@ -1,4 +1,5 @@
-<androidx.cardview.widget.CardView android:id="@+id/folderCard"
+<androidx.cardview.widget.CardView
+    android:id="@+id/folderCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
@@ -13,8 +14,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-<androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
@@ -54,6 +54,18 @@
             app:layout_constraintStart_toStartOf="@id/folderNameTextView"
             app:layout_constraintEnd_toStartOf="@id/folderTimeTextView"
             app:layout_constraintTop_toBottomOf="@id/folderNameTextView" />
+
+        <!-- Flashcard count (NEW) -->
+        <TextView
+            android:id="@+id/flashcardCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 cards"
+            android:textColor="#999999"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/folderDescTextView"
+            app:layout_constraintTop_toBottomOf="@id/folderDescTextView"
+            android:layout_marginTop="4dp"/>
 
         <!-- Timestamp RIGHT side of description -->
         <TextView

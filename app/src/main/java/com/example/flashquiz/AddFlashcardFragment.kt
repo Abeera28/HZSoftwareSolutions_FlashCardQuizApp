@@ -39,21 +39,39 @@ class AddFlashcardDialogFragment : DialogFragment() {
         existingQuestion = arguments?.getString("question")
         existingAnswer = arguments?.getString("answer")
         flashcardId = arguments?.getString("flashcardId")
+
+
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentAddFlashcardBinding.inflate(inflater, container, false)
 
-        // Pre-fill for edit
+        // Set folder name as toolbar title
+        val folderName = arguments?.getString("folderName") ?: "Flashcards"
+        binding.dialogToolbar.title = folderName
+        binding.dialogToolbar.setTitleTextColor(resources.getColor(android.R.color.white))
+        binding.dialogToolbar.setTitleTextAppearance(context, android.R.style.TextAppearance_Material_Widget_ActionBar_Title) // bold text
+
+        // Set white back button
+        binding.dialogToolbar.setNavigationIcon(android.R.drawable.ic_menu_close_clear_cancel)
+        binding.dialogToolbar.navigationIcon?.setTint(resources.getColor(android.R.color.white))
+        binding.dialogToolbar.setNavigationOnClickListener { dismiss() }
+
+        // Pre-fill question and answer if editing
         binding.questionEditText.setText(existingQuestion)
         binding.answerEditText.setText(existingAnswer)
 
-        binding.saveFlashcardBtn.setOnClickListener {
-            saveOrUpdateFlashcard()
-        }
+        // Save button
+        binding.saveFlashcardBtn.setOnClickListener { saveOrUpdateFlashcard() }
 
         return binding.root
     }
+
+
+
 
     private fun saveOrUpdateFlashcard() {
         val question = binding.questionEditText.text.toString().trim()
@@ -96,6 +114,16 @@ class AddFlashcardDialogFragment : DialogFragment() {
                     dismiss()
                 }
         }
+    }
+    override fun onStart() {
+        super.onStart()
+
+        // Increase width more (90% of screen), height stays WRAP_CONTENT
+        val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
+        val height = (resources.displayMetrics.heightPixels * 0.65).toInt() // medium height
+
+        dialog?.window?.setLayout(width, height)
+        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
     }
 
     override fun onDestroyView() {
