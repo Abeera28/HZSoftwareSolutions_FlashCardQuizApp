@@ -31,20 +31,26 @@ class AddFlashcardDialogFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, 0) // optional, remove default title
+        setStyle(STYLE_NO_TITLE, 0)
+
+        // Assign folderId from arguments
+        folderId = arguments?.getString("folderId") ?: ""
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddFlashcardBinding.inflate(inflater, container, false)
+
+        // Assign folderId and folderName
+        folderId = arguments?.getString("folderId") ?: ""
         val folderName = arguments?.getString("folderName") ?: "Flashcards"
+
         binding.dialogToolbar.title = folderName
         binding.dialogToolbar.navigationIcon?.setTint(resources.getColor(android.R.color.white))
         binding.dialogToolbar.setTitleTextColor(resources.getColor(android.R.color.white))
-
-
 
         // Toolbar back button
         binding.dialogToolbar.setNavigationIcon(android.R.drawable.ic_menu_close_clear_cancel)
@@ -54,6 +60,7 @@ class AddFlashcardDialogFragment : DialogFragment() {
 
         return binding.root
     }
+
 
     private fun saveFlashcard() {
         val question = binding.questionEditText.text.toString().trim()
