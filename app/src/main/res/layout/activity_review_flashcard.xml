@@ -12,12 +12,13 @@
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:background="@color/toolbar_color"
-        app:title="Periodic elements"
+        android:background="#1B2A6D"
+        app:title=""
         app:titleTextColor="@android:color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
 
     <!-- TOP ACTION ROW -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -90,16 +91,23 @@
         android:id="@+id/flashCard"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="24dp"
+
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="6dp"
+
         app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
+        app:cardElevation="6dp"
         app:cardBackgroundColor="@color/blue_card"
+
         app:layout_constraintTop_toBottomOf="@id/actionRow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -108,47 +116,48 @@
                 android:id="@+id/btnBack"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginStart="8dp"
                 android:background="@android:color/transparent"
+                android:contentDescription="Previous flashcard"
                 android:padding="12dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/backward"
-                app:tint="@android:color/white"
-                android:contentDescription="Previous flashcard"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginStart="8dp"/>
+                app:tint="@android:color/white" />
 
             <!-- CARD TEXT -->
             <TextView
                 android:id="@+id/tvCardText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="H"
+                android:text=""
+
+                android:textColor="@android:color/white"
                 android:textSize="48sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/white"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <!-- NEXT BUTTON -->
             <ImageButton
                 android:id="@+id/btnNext"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
+                android:layout_marginEnd="8dp"
                 android:background="@android:color/transparent"
+                android:contentDescription="Next flashcard"
                 android:padding="12dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/forward"
-                app:tint="@android:color/white"
-                android:contentDescription="Next flashcard"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginEnd="8dp"/>
-
+                app:tint="@android:color/white" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
