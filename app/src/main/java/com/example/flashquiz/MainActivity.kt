@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         // RecyclerView setup
         adapter = FolderAdapter(folderList) { folder ->
-            // Open FlashcardActivity when a folder is clicked
+            // Open flashcardActivity when a folder is clicked
             val intent = Intent(this, FlashcardActivity::class.java)
             intent.putExtra("folderId", folder.id)
             intent.putExtra("folderName", folder.name)
