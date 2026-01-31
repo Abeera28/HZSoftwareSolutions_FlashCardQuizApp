@@ -85,6 +85,20 @@ class FlashcardAdapter(
             .delete()
             .addOnSuccessListener {
                 Toast.makeText(holder.itemView.context, "Flashcard deleted", Toast.LENGTH_SHORT).show()
+                val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return@addOnSuccessListener
+                val folderRef = db.collection("users")
+                    .document(userId)
+                    .collection("folders")
+                    .document(folderId)
+
+                db.runTransaction { transaction ->
+                    val snapshot = transaction.get(folderRef)
+                    val currentCount = snapshot.getLong("flashcardCount") ?: 0
+                    if (currentCount > 0) {
+                        transaction.update(folderRef, "flashcardCount", currentCount - 1)
+                    }
+                }
+
                 // DO NOT remove from list manually
             }
             .addOnFailureListener {

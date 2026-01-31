@@ -16,6 +16,7 @@
         android:title="Add Flashcard"
         android:titleTextColor="@android:color/white"/>
 
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

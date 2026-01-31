@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FlashQuiz">
         <activity
+            android:name=".ReviewFlashcardActivity"
+            android:exported="false" />
+        <activity
             android:name=".FlashcardActivity"
             android:exported="false" />
         <activity

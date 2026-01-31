@@ -2,9 +2,11 @@ package com.example.flashquiz
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.Query
-import androidx.fragment.app.DialogFragment
+import kotlin.jvm.java
+import android.content.Intent
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flashquiz.databinding.ActivityFlashcardBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -36,7 +38,7 @@ class FlashcardActivity : AppCompatActivity() {
         // Get folder info
         folderId = intent.getStringExtra("folderId") ?: ""
         folderName = intent.getStringExtra("folderName") ?: "Flashcards"
-        binding.toolbarTitle.text = folderName
+        binding.flashcardToolbar.title = folderName
 
         // RecyclerView setup
         adapter = FlashcardAdapter(flashcardList, folderId, db)
@@ -44,6 +46,9 @@ class FlashcardActivity : AppCompatActivity() {
         binding.flashcardRecyclerView.adapter = adapter
         // Load flashcards
         loadFlashcards()
+
+        // Sync flashcard counts for old folders
+        syncFlashcardCounts()
 
         // FAB click
         binding.addFlashcardFab.setOnClickListener {
@@ -60,6 +65,16 @@ class FlashcardActivity : AppCompatActivity() {
             }
             binding.addFlashcardFab.visibility = if (fragmentVisible) View.GONE else View.VISIBLE
         }
+        binding.reviewFlashcardBtn.setOnClickListener {
+            if (flashcardList.isEmpty()) {
+                Toast.makeText(this, "Add flashcards to start review", Toast.LENGTH_SHORT).show()
+            } else {
+                val intent = Intent(this, ReviewFlashcardActivity::class.java)
+                intent.putExtra("folderId", folderId)
+                startActivity(intent)
+            }
+        }
+
 
 
     }
@@ -87,6 +102,38 @@ class FlashcardActivity : AppCompatActivity() {
                 checkEmptyState()
             }
 
+    }
+
+    private fun syncFlashcardCounts() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection("users")
+            .document(userId)
+            .collection("folders")
+            .get()
+            .addOnSuccessListener { result ->
+                for (doc in result) {
+                    val folderId = doc.id
+
+                    // Count flashcards in this folder
+                    db.collection("users")
+                        .document(userId)
+                        .collection("folders")
+                        .document(folderId)
+                        .collection("flashcards")
+                        .get()
+                        .addOnSuccessListener { flashcardsSnapshot ->
+                            val count = flashcardsSnapshot.size() // actual number of cards
+                            // Update Firestore folder document
+                            db.collection("users")
+                                .document(userId)
+                                .collection("folders")
+                                .document(folderId)
+                                .update("flashcardCount", count)
+                        }
+                }
+            }
     }
 
     private fun checkEmptyState() {

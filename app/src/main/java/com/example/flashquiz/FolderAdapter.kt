@@ -38,20 +38,7 @@ class FolderAdapter(private val folderList: MutableList<Folder>,
         val formatter = SimpleDateFormat("hh:mm a", Locale.getDefault())
         holder.binding.folderTimeTextView.text = formatter.format(date)
 
-        // --- LIVE FLASHCARD COUNT ---
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
-
-        // Listen to changes in flashcards collection
-        db.collection("users")
-            .document(userId)
-            .collection("folders")
-            .document(folder.id)
-            .collection("Cards")
-            .addSnapshotListener { snapshot, error ->
-                if (error != null) return@addSnapshotListener
-                val count = snapshot?.size() ?: 0
-                holder.binding.flashcardCountTextView.text = "$count flashcards"
-            }
+        holder.binding.flashcardCountTextView.text = "${folder.flashcardCount} cards"
 
         // 3-dot menu click
         holder.binding.menuButton.setOnClickListener {
